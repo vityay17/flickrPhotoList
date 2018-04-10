@@ -9,21 +9,19 @@
         <div
             class="col-md-12"
         >
-        <img
-            *ngIf="photo.mediumSize?.source; else loader"
-            [src]="photo.mediumSize?.source"
-            style="width: 100%;"
-            [alt]="photo.title"
-        />
-        <div class="activity-card-title">
-            <p>
-                <b>{{photo.title}}</b>
-            </p>
+            <img
+                *ngIf="photo.mediumSize?.source; else loader"
+                [src]="photo.mediumSize?.source"
+                style="width: 100%;"
+                [alt]="photo.title"
+            />
+            <div class="activity-card-title">
+                <p>
+                    <b>{{photo.title}}</b>
+                </p>
+            </div>
         </div>
     </div>
-
-    <!-- <h4>User's photos</h4>
-    <jhi-photo-list></jhi-photo-list> -->
 </div>
 
 <ng-template #loader>

@@ -7,20 +7,25 @@ import { HOME_ROUTE, HomeComponent } from './';
 import { PhotoListComponent } from './photo-list/photo-list.component';
 import { FlickrService } from './photo-list/flickr.service';
 import { PhotoDetailComponent } from './photo-list/photo-detail/photo-detail.component';
+import { PersonDetailComponent } from './photo-list/person-detail/person-detail.component';
+import { PhotoListRoutes } from './photo-list/photo-list.routing';
 
 @NgModule({
     imports: [
         FlickrPhotoListSharedModule,
-        RouterModule.forChild([ HOME_ROUTE ])
+        RouterModule.forChild([ HOME_ROUTE ]),
+        PhotoListRoutes
     ],
     declarations: [
         HomeComponent,
         PhotoListComponent,
-        PhotoDetailComponent
+        PhotoDetailComponent,
+        PersonDetailComponent
     ],
     entryComponents: [
         PhotoDetailComponent,
-        PhotoListComponent
+        PhotoListComponent,
+        PersonDetailComponent
     ],
     providers: [
         FlickrService

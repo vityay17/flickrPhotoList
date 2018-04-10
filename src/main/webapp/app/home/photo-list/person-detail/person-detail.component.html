@@ -1,0 +1,7 @@
+<div class="text-center">
+    <h4>{{person?.username?._content}}'s photos</h4>
+</div>
+<jhi-photo-list
+    *ngIf="userId"
+    [userId]="userId"
+></jhi-photo-list>

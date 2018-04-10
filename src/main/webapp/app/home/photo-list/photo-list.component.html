@@ -4,6 +4,7 @@
     [infiniteScrollDistance]="2"
     [infiniteScrollUpDistance]="1.5"
     [infiniteScrollThrottle]="50"
+    [infiniteScrollDisabled]="totalPage === pageNumber"
     (scrolled)="onScrollDown()"
 >
     <div
@@ -13,11 +14,16 @@
             class="col-lg-4 col-md-6 mb-5"
             *ngFor="let photo of photos"
         >
-            <div class="activity-card-content">
+            <div
+                class="activity-card-content"
+                *ngIf="!userListMode"
+            >
                 <div class="activity-card-attribution">
                     <div class="attribution-content with-pro-badge">
                         <div class="display-name">
-                            <a class="username" (click)="onClickViewDetail(photo)">
+                            <a class="username"
+                                [routerLink]="['./photos', photo.owner]"
+                            >
                                 {{photo.person?.username?._content}}
                             </a>
                         </div>

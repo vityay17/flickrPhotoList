@@ -31,9 +31,9 @@ export class FlickrService {
             { observe: 'response' });
     }
 
-    peopleGetPhotos(userId): Observable<HttpResponse<any>> {
+    peopleGetPhotos(userId, pageNumber, itemsPerPage): Observable<HttpResponse<any>> {
         return this.http.get(
-            `${this.resourcePeopleGetPhotosUrl}user_id=${userId}`,
+            `${this.resourcePeopleGetPhotosUrl}user_id=${userId}&page=${pageNumber}&per_page=${itemsPerPage}`,
         { observe: 'response' });
     }
 

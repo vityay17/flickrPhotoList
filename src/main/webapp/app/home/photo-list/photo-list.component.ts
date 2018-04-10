@@ -21,10 +21,11 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     pageNumber: number;
     text: string;
     private itemsPerPage: number;
-    totalItems: number;
+    totalPage: number;
     photos: Photo[] = [];
     isLoading = false;
     @Input() userId;
+    userListMode = false;
 
     private photosSearchSubscribe: Subscription;
 
@@ -35,7 +36,8 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit() {
-        this.pageNumber = 1;
+        this.userListMode = this.userId != null;
+        this.pageNumber = 0;
         this.text = 'dog';
         this.itemsPerPage = 20;
         this.loadPhotos();
@@ -58,15 +60,23 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     private loadPhotos() {
         this.isLoading = true;
-        this.photosSearchSubscribe = this.flickrService
-            .photosSearch(this.text, this.pageNumber, this.itemsPerPage)
-            .subscribe(
-                (res: HttpResponse<PhotoSearchResponse>) => this.onLoadPhotosSuccess(res.body, res.headers),
-                (res: HttpResponse<any>) => this.onLoadError(res.body));
+        if (this.userListMode) {
+            this.photosSearchSubscribe = this.flickrService
+                .peopleGetPhotos(this.userId, this.pageNumber, this.itemsPerPage)
+                .subscribe(
+                    (res: HttpResponse<PhotoSearchResponse>) => this.onLoadPhotosSuccess(res.body, res.headers),
+                    (res: HttpResponse<any>) => this.onLoadError(res.body));
+        } else {
+            this.photosSearchSubscribe = this.flickrService
+                .photosSearch(this.text, this.pageNumber, this.itemsPerPage)
+                .subscribe(
+                    (res: HttpResponse<PhotoSearchResponse>) => this.onLoadPhotosSuccess(res.body, res.headers),
+                    (res: HttpResponse<any>) => this.onLoadError(res.body));
+        }
     }
 
     private onLoadPhotosSuccess(data, headers) {
-        this.totalItems = data.photos.total;
+        this.totalPage = data.photos.pages;
         const newPhotos: Photo[] = data.photos.photo;
         this.populatePhotos(newPhotos);
     }
@@ -81,7 +91,9 @@ export class PhotoListComponent implements OnInit, OnDestroy {
             const photo: Photo = newPhotos[index];
             this.photos.push(photo);
             this.populatePhotoWithSizes(photo);
-            this.populatePhotoAuthorInformation(photo);
+            if (!this.userListMode) {
+                this.populateWithPhotoAuthorInformation(photo);
+                }
         }
         this.isLoading = false;
     }
@@ -106,7 +118,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         }
     }
 
-    private populatePhotoAuthorInformation(photo: Photo) {
+    private populateWithPhotoAuthorInformation(photo: Photo) {
         this.flickrService
             .peopleGetInfo(photo.owner)
             .subscribe(
