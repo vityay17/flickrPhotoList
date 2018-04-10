@@ -12,6 +12,8 @@ export class FlickrService {
     private flickrApiUrl = `https://api.flickr.com/services/rest/?${this.apiKey}&format=json&nojsoncallback=1&method=`;
     private resourcePhotosSearchUrl = `${this.flickrApiUrl}flickr.photos.search&`;
     private resourcePhotosGetSizesUrl = `${this.flickrApiUrl}flickr.photos.getSizes&`;
+    private resourcePeopleGetPhotosUrl = `${this.flickrApiUrl}flickr.people.getPhotos&`;
+    private resourcePeopleGetInfoUrl = `${this.flickrApiUrl}flickr.people.getInfo&`;
 
     constructor(
         private http: HttpClient
@@ -24,12 +26,20 @@ export class FlickrService {
     }
 
     photosGetSizes(photoId: string): Observable<HttpResponse<PhotoSizesResponse>> {
-        // apiurl_size = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes
-        // &api_key=daf3f7bf0e620efdbd28c29bb5bbc3e6
-        // &photo_id=" + myresult.id + "&format=json&nojsoncallback=1";
-
         return this.http.get<PhotoSizesResponse>(
             `${this.resourcePhotosGetSizesUrl}photo_id=${photoId}`,
             { observe: 'response' });
+    }
+
+    peopleGetPhotos(userId): Observable<HttpResponse<any>> {
+        return this.http.get(
+            `${this.resourcePeopleGetPhotosUrl}user_id=${userId}`,
+        { observe: 'response' });
+    }
+
+    peopleGetInfo(userId): Observable<HttpResponse<any>> {
+        return this.http.get(
+            `${this.resourcePeopleGetInfoUrl}user_id=${userId}`,
+        { observe: 'response' });
     }
 }

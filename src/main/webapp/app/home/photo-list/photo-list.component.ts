@@ -7,6 +7,7 @@ import { Photo } from './model/photo.model';
 import { JhiAlertService } from 'ng-jhipster';
 import { PhotoSizesResponse } from './model/photo-sizes-response.model';
 import { PhotoSize } from './model/photo-size.model';
+import { PeopleGetInfoResponse } from './model/people-get-info-response.model';
 
 @Component({
   selector: 'jhi-photo-list',
@@ -56,7 +57,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     private onLoadPhotosSuccess(data, headers) {
         this.totalItems = data.photos.total;
         const newPhotos: Photo[] = data.photos.photo;
-        this.populatePhotosWithSizes(newPhotos);
+        this.populatePhotos(newPhotos);
     }
 
     private onLoadError(error) {
@@ -64,14 +65,17 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.alertService.error(error.stat, error.message, null);
     }
 
-    private populatePhotosWithSizes(newPhotos: Photo[]) {
+    private populatePhotos(newPhotos: Photo[]) {
         for (let index = 0; index < newPhotos.length; index++) {
-            this.loadPhotoSizes(newPhotos[index]);
+            const photo: Photo = newPhotos[index];
+            this.photos.push(photo);
+            this.populatePhotoWithSizes(photo);
+            this.populatePhotoAuthorInformation(photo);
         }
         this.isLoading = false;
     }
 
-    private loadPhotoSizes(photo: Photo) {
+    private populatePhotoWithSizes(photo: Photo) {
         this.flickrService
             .photosGetSizes(photo.id)
             .subscribe(
@@ -89,13 +93,18 @@ export class PhotoListComponent implements OnInit, OnDestroy {
                 photo.largeSize = photoSize;
             }
         }
-        this.photos.push(photo);
     }
 
-    private onLoadNewPhotosSuccess(data, headers) {
-        this.totalItems = data.photos.total;
-        const newPhotos: Photo[] = data.photos.photo;
-        this.populatePhotosWithSizes(newPhotos);
+    private populatePhotoAuthorInformation(photo: Photo) {
+        this.flickrService
+            .peopleGetInfo(photo.owner)
+            .subscribe(
+                (res: HttpResponse<PeopleGetInfoResponse>) => this.onLoadAuthorInformatioSuccess(res.body, res.headers, photo),
+                (res: HttpResponse<any>) => this.onLoadError(res.body));
+    }
+
+    private onLoadAuthorInformatioSuccess(data: PeopleGetInfoResponse, headers, photo: Photo) {
+        photo.person = data.person;
     }
 
 }
