@@ -15,11 +15,9 @@
         >
             <div class="activity-card-content">
                 <div class="activity-card-attribution">
-                    <a href="/photos/alentours_ailleurs/ " class="avatar person no-refresh tiny">
-                    </a>
                     <div class="attribution-content with-pro-badge">
                         <div class="display-name">
-                            <a class="username" href="/photos/alentours_ailleurs/ ">
+                            <a class="username" (click)="onClickViewDetail(photo)">
                                 {{photo.person?.username?._content}}
                             </a>
                         </div>
@@ -28,12 +26,14 @@
                 </div>
             </div>
 
-            <img
-                *ngIf="photo.mediumSize?.source; else loader"
-                [src]="photo.mediumSize?.source"
-                style="width: 100%;"
-                [alt]="photo.title"
-            />
+            <a (click)="onClickViewDetail(photo)">
+                <img
+                    *ngIf="photo.mediumSize?.source; else loader"
+                    [src]="photo.mediumSize?.source"
+                    style="width: 100%;"
+                    [alt]="photo.title"
+                />
+            </a>
             <div class="activity-card-title">
                 <p>
                     <b>{{photo.title}}</b>

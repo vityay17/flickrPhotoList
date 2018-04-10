@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FlickrService } from './flickr.service';
 import { Subscription } from 'rxjs/Subscription';
 import { HttpResponse } from '@angular/common/http';
@@ -8,6 +8,9 @@ import { JhiAlertService } from 'ng-jhipster';
 import { PhotoSizesResponse } from './model/photo-sizes-response.model';
 import { PhotoSize } from './model/photo-size.model';
 import { PeopleGetInfoResponse } from './model/people-get-info-response.model';
+import { Person } from './model/person.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PhotoDetailComponent } from './photo-detail/photo-detail.component';
 
 @Component({
   selector: 'jhi-photo-list',
@@ -21,12 +24,14 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     totalItems: number;
     photos: Photo[] = [];
     isLoading = false;
+    @Input() userId;
 
     private photosSearchSubscribe: Subscription;
 
     constructor(
         private flickrService: FlickrService,
         private alertService: JhiAlertService,
+        private modalService: NgbModal
     ) { }
 
     ngOnInit() {
@@ -43,6 +48,12 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     onScrollDown() {
         this.pageNumber++;
         this.loadPhotos();
+    }
+
+    onClickViewDetail(photo: Person) {
+        const modalRef = this.modalService.open(PhotoDetailComponent, {size: 'lg'});
+        modalRef.componentInstance.photo = photo;
+        modalRef.result.then((result) => {}, (reason) => {});
     }
 
     private loadPhotos() {
