@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { FlickrPhotoListSharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';
+import { PhotoListComponent } from './photo-list/photo-list.component';
+import { FlickrService } from './photo-list/flickr.service';
 
 @NgModule({
     imports: [
@@ -12,10 +14,12 @@ import { HOME_ROUTE, HomeComponent } from './';
     ],
     declarations: [
         HomeComponent,
+        PhotoListComponent
     ],
     entryComponents: [
     ],
     providers: [
+        FlickrService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
