@@ -11,14 +11,15 @@ import { PhotoSize } from './model/photo-size.model';
 @Component({
   selector: 'jhi-photo-list',
   templateUrl: './photo-list.component.html',
-  styles: []
+  styleUrls: ['./photo-list.component.css']
 })
 export class PhotoListComponent implements OnInit, OnDestroy {
     pageNumber: number;
     text: string;
     private itemsPerPage: number;
     totalItems: number;
-    photos: Photo[];
+    photos: Photo[] = [];
+    isLoading = false;
 
     private photosSearchSubscribe: Subscription;
 
@@ -38,28 +39,36 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.photosSearchSubscribe.unsubscribe();
     }
 
+    onScrollDown() {
+        this.pageNumber++;
+        this.loadPhotos();
+    }
+
     private loadPhotos() {
+        this.isLoading = true;
         this.photosSearchSubscribe = this.flickrService
             .photosSearch(this.text, this.pageNumber, this.itemsPerPage)
             .subscribe(
                 (res: HttpResponse<PhotoSearchResponse>) => this.onLoadPhotosSuccess(res.body, res.headers),
-                (res: HttpResponse<any>) => this.onLoadPhotosError(res.body));
+                (res: HttpResponse<any>) => this.onLoadError(res.body));
     }
 
     private onLoadPhotosSuccess(data, headers) {
         this.totalItems = data.photos.total;
-        this.photos = data.photos.photo;
-        this.populatePhotosWithSizes();
+        const newPhotos: Photo[] = data.photos.photo;
+        this.populatePhotosWithSizes(newPhotos);
     }
 
-    private onLoadPhotosError(error) {
+    private onLoadError(error) {
+        this.isLoading = false;
         this.alertService.error(error.stat, error.message, null);
     }
 
-    private populatePhotosWithSizes() {
-        for (let index = 0; index < this.photos.length; index++) {
-            this.loadPhotoSizes(this.photos[index]);
+    private populatePhotosWithSizes(newPhotos: Photo[]) {
+        for (let index = 0; index < newPhotos.length; index++) {
+            this.loadPhotoSizes(newPhotos[index]);
         }
+        this.isLoading = false;
     }
 
     private loadPhotoSizes(photo: Photo) {
@@ -67,7 +76,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
             .photosGetSizes(photo.id)
             .subscribe(
                 (res: HttpResponse<PhotoSizesResponse>) => this.onLoadPhotoSizesSuccess(res.body, res.headers, photo),
-                (res: HttpResponse<any>) => this.onLoadPhotoSizesError(res.body));
+                (res: HttpResponse<any>) => this.onLoadError(res.body));
     }
 
     private onLoadPhotoSizesSuccess(data, headers, photo: Photo) {
@@ -80,10 +89,13 @@ export class PhotoListComponent implements OnInit, OnDestroy {
                 photo.largeSize = photoSize;
             }
         }
+        this.photos.push(photo);
     }
 
-    private onLoadPhotoSizesError(error) {
-        // "stat": "fail", "code": 1, "message": "Photo not found"
-        this.alertService.error(error.stat, error.message, null);
+    private onLoadNewPhotosSuccess(data, headers) {
+        this.totalItems = data.photos.total;
+        const newPhotos: Photo[] = data.photos.photo;
+        this.populatePhotosWithSizes(newPhotos);
     }
+
 }
