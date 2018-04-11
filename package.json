@@ -30,7 +30,8 @@
     "swagger-ui": "2.2.10",
     "tether": "1.4.0",
     "zone.js": "0.8.19",
-    "primeng": "^5.2.4"
+    "primeng": "^5.2.4",
+    "@types/googlemaps": "^3.30.8"
   },
   "devDependencies": {
     "@angular/cli": "1.6.6",

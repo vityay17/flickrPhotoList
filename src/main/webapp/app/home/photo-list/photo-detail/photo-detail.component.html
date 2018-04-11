@@ -1,25 +1,37 @@
-<div class="modal-header">
-    <b>{{photo.title}}</b>
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-        (click)="close()">&times;</button>
-</div>
-<div class="modal-body">
-    <div
-        class="row"
-    >
-        <div
-            class="col-md-12"
-        >
-            <img
-                *ngIf="photo.largeSize?.source; else loader"
-                [src]="photo.largeSize?.source"
-                style="width: 100%;"
-                [alt]="photo.title"
-            />
+<div *ngIf="photo">
+    <div class="modal-header">
+        <b>{{photo.title}}</b>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            (click)="close()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <img
+                    *ngIf="photo.mediumSize?.source; else loader"
+                    [src]="photo.mediumSize?.source"
+                    style="width: 100%;"
+                    [alt]="photo.title"
+                />
+            </div>
+        </div>
+
+        <div class="row my-3" *ngIf="isLocationExist; else noLocation">
+            <div class="col">
+                <p-gmap #gmap [options]="options" [overlays]="overlays" [style]="{'width':'100%','height':'320px'}" ></p-gmap>
+            </div>
         </div>
     </div>
 </div>
 
 <ng-template #loader>
     <p-progressSpinner></p-progressSpinner>
+</ng-template>
+
+<ng-template #noLocation>
+    <div *ngIf="!isLoading; else loader" class="row col text-center">
+        <span class="badge badge-warning m-3">
+            <h5>Photo doesn't have location info</h5>
+        </span>
+    </div>
 </ng-template>

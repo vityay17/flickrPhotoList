@@ -1,5 +1,6 @@
 import { PhotoSize } from './photo-size.model';
 import { Person } from './person.model';
+import { Location } from './location.model';
 
 export class Photo {
     constructor(
@@ -14,6 +15,7 @@ export class Photo {
         public isfamily?: number,
         public mediumSize?: PhotoSize,
         public largeSize?: PhotoSize,
-        public person?: Person
+        public person?: Person,
+        public location?: Location
     ) {}
 }

@@ -3,6 +3,8 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { PhotoSearchResponse } from './model/photo-search-response.model';
 import { PhotoSizesResponse } from './model/photo-sizes-response.model';
+import { PeopleGetInfoResponse } from './model/people-get-info-response.model';
+import { PhotosGeoGetLocationResponse } from './model/photos-geo-get-location-response.model';
 
 @Injectable()
 export class FlickrService {
@@ -14,6 +16,7 @@ export class FlickrService {
     private resourcePhotosGetSizesUrl = `${this.flickrApiUrl}flickr.photos.getSizes&`;
     private resourcePeopleGetPhotosUrl = `${this.flickrApiUrl}flickr.people.getPhotos&`;
     private resourcePeopleGetInfoUrl = `${this.flickrApiUrl}flickr.people.getInfo&`;
+    private resourcePhotosGeoGetLocationUrl = `${this.flickrApiUrl}flickr.photos.geo.getLocation&`;
 
     constructor(
         private http: HttpClient
@@ -37,9 +40,16 @@ export class FlickrService {
         { observe: 'response' });
     }
 
-    peopleGetInfo(userId): Observable<HttpResponse<any>> {
-        return this.http.get(
+    peopleGetInfo(userId): Observable<HttpResponse<PeopleGetInfoResponse>> {
+        return this.http.get<PeopleGetInfoResponse>(
             `${this.resourcePeopleGetInfoUrl}user_id=${userId}`,
         { observe: 'response' });
     }
+
+    photosGeoGetLocation(photoId): Observable<HttpResponse<PhotosGeoGetLocationResponse>> {
+        return this.http.get<PhotosGeoGetLocationResponse>(
+            `${this.resourcePhotosGeoGetLocationUrl}photo_id=${photoId}`,
+        { observe: 'response' });
+    }
+
 }

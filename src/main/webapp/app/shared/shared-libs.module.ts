@@ -8,6 +8,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CookieModule } from 'ngx-cookie';
 
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {GMapModule} from 'primeng/gmap';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
         }),
         InfiniteScrollModule,
         CookieModule.forRoot(),
-        ProgressSpinnerModule
+        ProgressSpinnerModule,
+        GMapModule
     ],
     exports: [
         FormsModule,
@@ -27,7 +29,8 @@ import {ProgressSpinnerModule} from 'primeng/progressspinner';
         NgbModule,
         NgJhipsterModule,
         InfiniteScrollModule,
-        ProgressSpinnerModule
+        ProgressSpinnerModule,
+        GMapModule
     ]
 })
 export class FlickrPhotoListSharedLibsModule {}
