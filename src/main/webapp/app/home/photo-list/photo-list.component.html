@@ -1,25 +1,36 @@
-<div class="ui-widget-header p-2" *ngIf="!userListMode">
+<div class="ui-widget-header p-2">
     <form name="searchForm" class="form-inline">
-        <i class="fa fa-search"></i>
+        <i class="fa fa-search" *ngIf="!userListMode"></i>
         <div class="input-group px-2">
-            <input
-                type="text"
-                name="currentSearch"
-                                placeholder="Search..."
-                [(ngModel)]="text"
-                (ngModelChange)="onTextChange()"
-            />
+            <ng-container *ngIf="!userListMode">
+                <input
+                    type="text"
+                    name="currentSearch"
+                    placeholder="Search..."
+                    [(ngModel)]="text"
+                    (ngModelChange)="onTextChange()"
+                />
+                <button
+                    type="button"
+                    class="input-group-addon btn btn-danger"
+                    *ngIf="text"
+                    (click)="text = ''; onTextChange()"
+                >
+                    <span class="fa fa-trash-o"></span>
+                </button>
+                <span *ngIf="!text" class="badge badge-danger">
+                    Enter some text.
+                </span>
+            </ng-container>
             <button
                 type="button"
-                class="input-group-addon btn btn-danger"
-                *ngIf="text"
-                (click)="text = ''; onTextChange()"
+                ngbTooltip="Check listed photo below on the map"
+                class="input-group-addon btn btn-info ml-1"
+                (click)="onClickMapOfPhotos()"
             >
-                <span class="fa fa-trash-o"></span>
+                <span class="fa fa-map"></span>
+                <span>Map of photos</span>
             </button>
-            <span *ngIf="!text" class="badge badge-danger">
-                Enter some text.
-            </span>
         </div>
     </form>
 </div>

@@ -49,7 +49,7 @@ export class PhotoDetailComponent implements OnInit {
             this.isLocationExist = true;
             this.options = {
                 center: {lat: +location.latitude, lng: +location.longitude},
-                zoom: 12
+                zoom: 5
             };
             this.overlays = [
                 new google.maps.Marker({position: {lat: +location.latitude, lng: +location.longitude}, title: ''})];

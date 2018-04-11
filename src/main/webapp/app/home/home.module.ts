@@ -9,6 +9,7 @@ import { FlickrService } from './photo-list/flickr.service';
 import { PhotoDetailComponent } from './photo-list/photo-detail/photo-detail.component';
 import { PersonDetailComponent } from './photo-list/person-detail/person-detail.component';
 import { PhotoListRoutes } from './photo-list/photo-list.routing';
+import { MapPhotosComponent } from './photo-list/map-photos/map-photos.component';
 
 @NgModule({
     imports: [
@@ -20,12 +21,14 @@ import { PhotoListRoutes } from './photo-list/photo-list.routing';
         HomeComponent,
         PhotoListComponent,
         PhotoDetailComponent,
-        PersonDetailComponent
+        PersonDetailComponent,
+        MapPhotosComponent
     ],
     entryComponents: [
         PhotoDetailComponent,
         PhotoListComponent,
-        PersonDetailComponent
+        PersonDetailComponent,
+        MapPhotosComponent
     ],
     providers: [
         FlickrService

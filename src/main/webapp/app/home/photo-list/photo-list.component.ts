@@ -11,6 +11,9 @@ import { PeopleGetInfoResponse } from './model/people-get-info-response.model';
 import { Person } from './model/person.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PhotoDetailComponent } from './photo-detail/photo-detail.component';
+import { PhotosGeoGetLocationResponse } from './model/photos-geo-get-location-response.model';
+import { Location } from './model/location.model';
+import { MapPhotosComponent } from './map-photos/map-photos.component';
 
 @Component({
   selector: 'jhi-photo-list',
@@ -58,6 +61,12 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         modalRef.result.then((result) => {}, (reason) => {});
     }
 
+    onClickMapOfPhotos() {
+        const modalRef = this.modalService.open(MapPhotosComponent, {size: 'lg'});
+        modalRef.componentInstance.photos = this.photos;
+        modalRef.result.then((result) => {}, (reason) => {});
+    }
+
     onTextChange() {
         this.photos = [];
         this.pageNumber = 0;
@@ -99,9 +108,10 @@ export class PhotoListComponent implements OnInit, OnDestroy {
             const photo: Photo = newPhotos[index];
             this.photos.push(photo);
             this.populatePhotoWithSizes(photo);
+            this.populatePhotoWithLocation(photo);
             if (!this.userListMode) {
                 this.populateWithPhotoAuthorInformation(photo);
-                }
+            }
         }
         this.isLoading = false;
     }
@@ -136,6 +146,20 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     private onLoadAuthorInformatioSuccess(data: PeopleGetInfoResponse, headers, photo: Photo) {
         photo.person = data.person;
+    }
+
+    private populatePhotoWithLocation(photo: Photo) {
+        this.flickrService
+            .photosGeoGetLocation(photo.id)
+            .subscribe(
+                (res: HttpResponse<PhotosGeoGetLocationResponse>) => this.onLoadPhotosGeoGetLocationSuccess(res.body, res.headers, photo),
+                (res: HttpResponse<any>) => this.onLoadError(res.body));
+    }
+
+    private onLoadPhotosGeoGetLocationSuccess(data: PhotosGeoGetLocationResponse, headers, photo: Photo) {
+        if (data.photo) {
+            photo.location = new Location(+data.photo.location.latitude, +data.photo.location.longitude);
+        }
     }
 
 }
