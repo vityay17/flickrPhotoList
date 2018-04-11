@@ -11,8 +11,8 @@
             class="col-md-12"
         >
             <img
-                *ngIf="photo.mediumSize?.source; else loader"
-                [src]="photo.mediumSize?.source"
+                *ngIf="photo.largeSize?.source; else loader"
+                [src]="photo.largeSize?.source"
                 style="width: 100%;"
                 [alt]="photo.title"
             />

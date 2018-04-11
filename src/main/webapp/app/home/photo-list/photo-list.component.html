@@ -1,3 +1,28 @@
+<div class="ui-widget-header p-2" *ngIf="!userListMode">
+    <form name="searchForm" class="form-inline">
+        <i class="fa fa-search"></i>
+        <div class="input-group px-2">
+            <input
+                type="text"
+                name="currentSearch"
+                                placeholder="Search..."
+                [(ngModel)]="text"
+                (ngModelChange)="onTextChange()"
+            />
+            <button
+                type="button"
+                class="input-group-addon btn btn-danger"
+                *ngIf="text"
+                (click)="text = ''; onTextChange()"
+            >
+                <span class="fa fa-trash-o"></span>
+            </button>
+            <span *ngIf="!text" class="badge badge-danger">
+                Enter some text.
+            </span>
+        </div>
+    </form>
+</div>
 <div
     class="photos mx-5"
     infiniteScroll
@@ -14,21 +39,13 @@
             class="col-lg-4 col-md-6 mb-5"
             *ngFor="let photo of photos"
         >
-            <div
-                class="activity-card-content"
-                *ngIf="!userListMode"
-            >
-                <div class="activity-card-attribution">
-                    <div class="attribution-content with-pro-badge">
-                        <div class="display-name">
-                            <a class="username"
-                                [routerLink]="['./photos', photo.owner]"
-                            >
-                                {{photo.person?.username?._content}}
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center" *ngIf="!userListMode">
+                <a class="w-100 badge badge-info"
+                    ngbTooltip="Open profile {{photo.person?.username?._content}}"
+                    [routerLink]="['./photos', photo.owner]"
+                >
+                    {{photo.person?.username?._content}}
+                </a>
             </div>
 
             <a (click)="onClickViewDetail(photo)">
@@ -39,10 +56,12 @@
                     [alt]="photo.title"
                 />
             </a>
-            <div class="activity-card-title">
-                <p>
+            <div class="text-center">
+                <a (click)="onClickViewDetail(photo)"
+                    ngbTooltip="Open {{photo.title}}"
+                >
                     <b>{{photo.title}}</b>
-                </p>
+                </a>
             </div>
         </div>
         <div
@@ -51,7 +70,6 @@
             <p-progressSpinner></p-progressSpinner>
         </div>
     </div>
-
 </div>
 
 <ng-template #loader>

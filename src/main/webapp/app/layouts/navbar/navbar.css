@@ -9,6 +9,10 @@ Navbar
 .jh-navbar {
     background-color: #353d47;
     padding: .2em 1em;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    position: fixed;
 }
 
 .jh-navbar .profile-image {

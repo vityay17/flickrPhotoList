@@ -58,6 +58,14 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         modalRef.result.then((result) => {}, (reason) => {});
     }
 
+    onTextChange() {
+        this.photos = [];
+        this.pageNumber = 0;
+        if (this.text && this.text !== '') {
+            this.loadPhotos();
+        }
+    }
+
     private loadPhotos() {
         this.isLoading = true;
         if (this.userListMode) {
@@ -112,7 +120,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
             const photoSize = photoSizes[index];
             if (photoSize.label === 'Medium') {
                 photo.mediumSize = photoSize;
-            } else if (photoSize.label === 'Large') {
+            } else if (photoSize.label === 'Original') {
                 photo.largeSize = photoSize;
             }
         }
