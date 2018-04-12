@@ -38,21 +38,24 @@ export class PhotoDetailComponent implements OnInit {
             .photosGeoGetLocation(this.photo.id)
             .subscribe(
                 (res: HttpResponse<PhotosGeoGetLocationResponse>) => {
-                    this.initLocation(res.body.photo.location);
+                    this.initLocation(res.body);
                 },
                 (res: HttpResponse<any>) => {});
     }
 
-    private initLocation(location: Location) {
+    private initLocation(body: PhotosGeoGetLocationResponse) {
         this.isLoading = false;
-        if (location.latitude) {
-            this.isLocationExist = true;
-            this.options = {
-                center: {lat: +location.latitude, lng: +location.longitude},
-                zoom: 5
-            };
-            this.overlays = [
-                new google.maps.Marker({position: {lat: +location.latitude, lng: +location.longitude}, title: ''})];
+        if (body.photo && body.photo.location) {
+            const location = body.photo.location;
+            if ( location.latitude) {
+                this.isLocationExist = true;
+                this.options = {
+                    center: {lat: +location.latitude, lng: +location.longitude},
+                    zoom: 5
+                };
+                this.overlays = [
+                    new google.maps.Marker({position: {lat: +location.latitude, lng: +location.longitude}, title: ''})];
+            }
         }
     }
 }
