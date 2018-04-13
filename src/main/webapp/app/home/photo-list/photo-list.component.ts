@@ -25,7 +25,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     text: string;
     private itemsPerPage: number;
     totalPage: number;
-    photos: Photo[] = [];
+    arraysPhotos: Photo[][] = [[]];
     isLoading = false;
     @Input() userId;
     userListMode = false;
@@ -63,12 +63,12 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     onClickMapOfPhotos() {
         const modalRef = this.modalService.open(MapPhotosComponent, {size: 'lg'});
-        modalRef.componentInstance.photos = this.photos;
+        // modalRef.componentInstance.photos = this.photos;
         modalRef.result.then((result) => {}, (reason) => {});
     }
 
     onTextChange() {
-        this.photos = [];
+        this.arraysPhotos = [];
         this.pageNumber = 0;
         if (this.text && this.text !== '') {
             this.loadPhotos();
@@ -104,15 +104,17 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     }
 
     private populatePhotos(newPhotos: Photo[]) {
+        const array: Photo[] = [];
         for (let index = 0; index < newPhotos.length; index++) {
             const photo: Photo = newPhotos[index];
-            this.photos.push(photo);
+            array.push(photo);
             this.populatePhotoWithSizes(photo);
             this.populatePhotoWithLocation(photo);
             if (!this.userListMode) {
                 this.populateWithPhotoAuthorInformation(photo);
             }
         }
+        this.arraysPhotos.push(array);
         this.isLoading = false;
     }
 

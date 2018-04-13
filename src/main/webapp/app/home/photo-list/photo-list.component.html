@@ -43,42 +43,47 @@
     [infiniteScrollDisabled]="totalPage === pageNumber"
     (scrolled)="onScrollDown()"
 >
-    <div
-        class="row"
-    >
+    <div *ngFor="let arrayPhoto of arraysPhotos">
         <div
-            class="col-lg-4 col-md-6 mb-5"
-            *ngFor="let photo of photos"
+            class="card-columns"
         >
-            <div class="text-center" *ngIf="!userListMode">
-                <a class="w-100 badge badge-info"
-                    ngbTooltip="Open profile {{photo.person?.username?._content}}"
-                    [routerLink]="['./photos', photo.owner]"
+                <div
+                    class="card"
+                    *ngFor="let photo of arrayPhoto"
                 >
-                    {{photo.person?.username?._content}}
-                </a>
-            </div>
+                    <div class="text-center" *ngIf="!userListMode">
+                        <a class="w-100 badge badge-info"
+                            ngbTooltip="Open profile {{photo.person?.username?._content}}"
+                            [routerLink]="['./photos', photo.owner]"
+                        >
+                            {{photo.person?.username?._content}}
+                        </a>
+                    </div>
 
-            <a (click)="onClickViewDetail(photo)">
-                <img
-                    *ngIf="photo.mediumSize?.source; else loader"
-                    [src]="photo.mediumSize?.source"
-                    style="width: 100%;"
-                    [alt]="photo.title"
-                />
-            </a>
-            <div class="text-center">
-                <a (click)="onClickViewDetail(photo)"
-                    ngbTooltip="Open {{photo.title}}"
-                >
-                    <b>{{photo.title}}</b>
-                </a>
+                    <a (click)="onClickViewDetail(photo)">
+                        <img
+                            *ngIf="photo.mediumSize?.source; else loader"
+                            [src]="photo.mediumSize?.source"
+                            style="width: 100%;"
+                            [alt]="photo.title"
+                        />
+                    </a>
+                    <div class="text-center">
+                        <a (click)="onClickViewDetail(photo)"
+                            ngbTooltip="Open {{photo.title}}"
+                        >
+                            <b>{{photo.title}}</b>
+                            <span
+                                *ngIf="photo.location"
+                                class="badge badge-success">GEO</span>
+                        </a>
+                    </div>
+                </div>
+                <div
+                *ngIf="isLoading"
+                class="col-lg-4 col-md-6 mb-5">
+                <p-progressSpinner></p-progressSpinner>
             </div>
-        </div>
-        <div
-            *ngIf="isLoading"
-            class="col-lg-4 col-md-6 mb-5">
-            <p-progressSpinner></p-progressSpinner>
         </div>
     </div>
 </div>
