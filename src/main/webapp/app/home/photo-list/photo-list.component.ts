@@ -14,6 +14,7 @@ import { PhotoDetailComponent } from './photo-detail/photo-detail.component';
 import { PhotosGeoGetLocationResponse } from './model/photos-geo-get-location-response.model';
 import { Location } from './model/location.model';
 import { MapPhotosComponent } from './map-photos/map-photos.component';
+import { PhotoListService } from './photo-list.service';
 
 @Component({
   selector: 'jhi-photo-list',
@@ -25,7 +26,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     text: string;
     private itemsPerPage: number;
     totalPage: number;
-    arraysPhotos: Photo[][] = [[]];
+    photos: Photo[] = [];
     isLoading = false;
     @Input() userId;
     userListMode = false;
@@ -35,14 +36,15 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     constructor(
         private flickrService: FlickrService,
         private alertService: JhiAlertService,
+        private photoListService: PhotoListService,
         private modalService: NgbModal
     ) { }
 
     ngOnInit() {
         this.userListMode = this.userId != null;
         this.pageNumber = 0;
-        this.text = 'dog';
         this.itemsPerPage = 20;
+        this.text = this.photoListService.getText();
         this.loadPhotos();
     }
 
@@ -63,14 +65,15 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     onClickMapOfPhotos() {
         const modalRef = this.modalService.open(MapPhotosComponent, {size: 'lg'});
-        // modalRef.componentInstance.photos = this.photos;
+        (<MapPhotosComponent>modalRef.componentInstance).photos = this.photos;
         modalRef.result.then((result) => {}, (reason) => {});
     }
 
     onTextChange() {
-        this.arraysPhotos = [];
+        this.photos = [];
         this.pageNumber = 0;
         if (this.text && this.text !== '') {
+            this.photoListService.setText(this.text);
             this.loadPhotos();
         }
     }
@@ -104,17 +107,15 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     }
 
     private populatePhotos(newPhotos: Photo[]) {
-        const array: Photo[] = [];
         for (let index = 0; index < newPhotos.length; index++) {
             const photo: Photo = newPhotos[index];
-            array.push(photo);
+            this.photos.push(photo);
             this.populatePhotoWithSizes(photo);
             this.populatePhotoWithLocation(photo);
             if (!this.userListMode) {
                 this.populateWithPhotoAuthorInformation(photo);
             }
         }
-        this.arraysPhotos.push(array);
         this.isLoading = false;
     }
 

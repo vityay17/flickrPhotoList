@@ -32,28 +32,23 @@ export class MapPhotosComponent implements OnInit {
 
     initLocations() {
         this.isLoading = true;
-        for (let index = 0; index < this.photos.length; index++) {
-            const photo = this.photos[index];
+        for (let i = 0; i < this.photos.length; i++) {
+            const photo = this.photos[i];
             this.initLocation(photo.location);
         }
         this.isLoading = false;
-
     }
 
     private initLocation(location: Location) {
-
         if (location && location.latitude) {
             this.overlays.push(
-                new google.maps.Marker(
-                    {
-                        position: {
-                            lat: +location.latitude,
-                            lng: +location.longitude
-                        },
-                        title: ''
-                    }
-                )
-            );
+                new google.maps.Marker({
+                    position: {
+                        lat: +location.latitude,
+                        lng: +location.longitude
+                    },
+                    title: ''
+                }));
         }
     }
 

@@ -10,6 +10,7 @@ import { PhotoDetailComponent } from './photo-list/photo-detail/photo-detail.com
 import { PersonDetailComponent } from './photo-list/person-detail/person-detail.component';
 import { PhotoListRoutes } from './photo-list/photo-list.routing';
 import { MapPhotosComponent } from './photo-list/map-photos/map-photos.component';
+import { PhotoListService } from './photo-list/photo-list.service';
 
 @NgModule({
     imports: [
@@ -31,7 +32,8 @@ import { MapPhotosComponent } from './photo-list/map-photos/map-photos.component
         MapPhotosComponent
     ],
     providers: [
-        FlickrService
+        FlickrService,
+        PhotoListService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
